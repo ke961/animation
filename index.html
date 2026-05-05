@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charming Ghost Login</title>
+    <style>
+        :root {
+            --ghost-color: #ffffff;
+            --outline: #000000;
+            --accent: #8b5cf6;
+            --success: #22c55e;
+            --error: #f43f5e;
+        }
+
+        body {
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-card {
+            background: white;
+            display: flex;
+            padding: 60px;
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            align-items: center;
+            gap: 70px;
+            min-width: 780px;
+        }
+
+        /* --- GHOST ANIMATION AREA --- */
+        .ghost-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            position: relative;
+            width: 260px;
+            height: 200px;
+        }
+
+        .ghost {
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.05));
+        }
+
+        .ghost.big { width: 120px; height: 150px; }
+        .ghost.small { width: 85px; height: 110px; animation-delay: 0.5s; }
+
+        .body-svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--ghost-color);
+            stroke: var(--outline);
+            stroke-width: 4px;
+            stroke-linejoin: round;
+        }
+
+        .face {
+            position: absolute;
+            top: 35%; width: 100%;
+            display: flex; justify-content: center; gap: 15px;
+            z-index: 2;
+            transition: 0.3s;
+        }
+        .small .face { gap: 10px; top: 32%; }
+
+        .eye {
+            width: 14px; height: 18px; background: var(--outline);
+            border-radius: 50%; position: relative; overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .pupil {
+            width: 6px; height: 6px; background: white; border-radius: 50%;
+            position: absolute; top: 3px; left: 3px;
+        }
+
+        .mouth {
+            width: 20px; height: 12px; background: #fb7185;
+            border: 3px solid var(--outline); border-radius: 0 0 12px 12px;
+            position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+            transition: all 0.3s ease;
+        }
+
+        /* Perfectly Rounded Hands */
+       /* --- Edited Hads to match specific mitten style --- */
+.hand {
+    width: 32px;  /* Longer shape */
+    height: 22px; /* Oblong */
+    background: white;
+    border: 4px solid var(--outline);
+    border-radius: 12px; /* Mitten nub shape */
+    position: absolute;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 3;
+    /* Puts the rotation point at the 'base' of the arm, connecting to the body */
+    transform-origin: 50% 100%; 
+}
+
+.hand.left {
+    left: -16px; /* Moves hand to meet body line */
+    top: 48%;
+    /* Perfect outward 'V' angle from your reference */
+    transform: rotate(-35deg); 
+}
+
+.hand.right {
+    right: -16px; /* Moves hand to meet body line */
+    top: 48%;
+    /* Perfect outward 'V' angle from your reference */
+    transform: rotate(35deg); 
+}
+
+/* Folds the mitts inward precisely towards the eyes */
+.ghost.shy .hand.left { 
+    transform: translate(32px, -35px) rotate(140deg); 
+}
+
+.ghost.shy .hand.right { 
+    transform: translate(-32px, -35px) rotate(-140deg); 
+}
+        /* CHARMING SUCCESS STATE */
+        .ghost.happy {
+            animation: jump 0.4s ease-in-out infinite alternate !important;
+        }
+        .ghost.happy .eye {
+            height: 6px;
+            border-radius: 10px 10px 0 0;
+            background: transparent;
+            border-top: 4px solid var(--outline);
+        }
+        .ghost.happy .pupil { display: none; }
+        .ghost.happy .mouth {
+            height: 16px;
+            width: 24px;
+            background: #f43f5e;
+            border-radius: 0 0 20px 20px;
+        }
+
+        @keyframes jump {
+            from { transform: translateY(0); }
+            to { transform: translateY(-25px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .tear {
+            position: absolute; width: 6px; height: 10px; background: #60a5fa;
+            border-radius: 50%; animation: fall 0.8s linear forwards;
+            z-index: 4;
+        }
+        @keyframes fall { to { transform: translateY(60px); opacity: 0; } }
+
+        .bubble {
+            position: absolute; top: -70px; right: -20px;
+            background: #1e293b; color: white; padding: 10px 20px;
+            border-radius: 20px; font-size: 14px; display: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        /* --- FORM AREA --- */
+        .form-area { flex: 1; }
+        h1 { font-size: 36px; margin: 0 0 30px 0; color: #0f172a; }
+        .input-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 10px; font-weight: 600; color: #64748b; }
+        input {
+            width: 100%; padding: 14px; border: 2.5px solid #e2e8f0;
+            border-radius: 12px; font-size: 16px; outline: none; transition: 0.3s;
+            box-sizing: border-box;
+        }
+        input:focus { border-color: var(--accent); }
+        input.error { border-color: var(--error); background: #fff1f2; }
+
+        .btn {
+            width: 100%; padding: 16px; border: none; border-radius: 12px;
+            background: #3b3c78; color: white; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: 0.3s;
+        }
+        .btn:hover { background: #3b3c78; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <div class="ghost-container">
+        <div class="bubble" id="bubble">No looking! 😭</div>
+        
+        <div class="ghost small" id="g-small">
+            <svg class="body-svg" viewBox="0 0 100 120">
+                <path d="M10,50 Q10,10 50,10 Q90,10 90,50 L90,100 Q80,90 70,100 Q60,110 50,100 Q40,90 30,100 Q20,110 10,100 Z" />
+            </svg>
+            <div class="face">
+                <div class="eye"><div class="pupil"></div></div>
+                <div class="eye"><div class="pupil"></div></div>
+                <div class="mouth"></div>
+            </div>
+            <div class="hand left"></div>
+            <div class="hand right"></div>
+            <div class="tear-box"></div>
+        </div>
+
+        <div class="ghost big" id="g-big">
+            <svg class="body-svg" viewBox="0 0 100 120">
+                <path d="M10,50 Q10,10 50,10 Q90,10 90,50 L90,100 Q80,90 70,100 Q60,110 50,100 Q40,90 30,100 Q20,110 10,100 Z" />
+            </svg>
+            <div class="face">
+                <div class="eye"><div class="pupil"></div></div>
+                <div class="eye"><div class="pupil"></div></div>
+                <div class="mouth"></div>
+            </div>
+            <div class="hand left"></div>
+            <div class="hand right"></div>
+            <div class="tear-box"></div>
+        </div>
+    </div>
+
+    <div class="form-area">
+        <h1>Sign In</h1>
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" placeholder="Please enter your username" id="email">
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="Please enter your password" id="pass">
+        </div>
+        <button class="btn" id="loginBtn">Sign In</button>
+    </div>
+</div>
+
+<script>
+    const ghosts = document.querySelectorAll('.ghost');
+    const pupils = document.querySelectorAll('.pupil');
+    const passInput = document.getElementById('pass');
+    const emailInput = document.getElementById('email');
+    const loginBtn = document.getElementById('loginBtn');
+    const bubble = document.getElementById('bubble');
+    let tearInterval;
+
+    const CORRECT_USER = "keya";
+    const CORRECT_PASS = "1234";
+
+    // 1. Cursor Tracking
+    document.addEventListener('mousemove', (e) => {
+        // Stop tracking if eyes are covered or if ghosts are happy
+        if (document.activeElement === passInput || ghosts[0].classList.contains('happy')) return;
+
+        pupils.forEach(pupil => {
+            const rect = pupil.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            const angle = Math.atan2(e.clientX - x, e.clientY - y);
+            const rot = (angle * (180 / Math.PI) * -1) + 180;
+            pupil.style.transform = `rotate(${rot}deg) translate(4px)`;
+        });
+    });
+
+    // 2. Hide eyes animation
+    passInput.addEventListener('focus', () => {
+        if (!ghosts[0].classList.contains('happy')) {
+            ghosts.forEach(g => g.classList.add('shy'));
+        }
+    });
+
+    passInput.addEventListener('blur', () => {
+        ghosts.forEach(g => g.classList.remove('shy'));
+    });
+
+    // 3. Validation Logic
+    loginBtn.addEventListener('click', () => {
+        // Reset states
+        clearInterval(tearInterval);
+        ghosts.forEach(g => g.classList.remove('happy', 'shy'));
+        emailInput.classList.remove('error');
+        passInput.classList.remove('error');
+        bubble.style.backgroundColor = '#e80c0c';
+
+        const userVal = emailInput.value;
+        const passVal = passInput.value;
+
+        if (userVal === CORRECT_USER && passVal === CORRECT_PASS) {
+            // SUCCESS STATE
+            bubble.innerText = "Successfully logged in! 🎉";
+            bubble.style.backgroundColor = '#c487ab';
+            bubble.style.display = 'block';
+            ghosts.forEach(g => g.classList.add('happy'));
+        } else {
+            // ERROR STATE
+            bubble.style.display = 'block';
+            if (!userVal || !passVal) {
+                bubble.innerText = "Please provide all inputs! ⚠️";
+            } else {
+                bubble.innerText = "Password is not correct! 😭";
+            }
+            
+            passInput.classList.add('error');
+            
+            // Look at each other
+            document.querySelectorAll('#g-small .pupil').forEach(p => p.style.transform = 'translateX(7px)');
+            document.querySelectorAll('#g-big .pupil').forEach(p => p.style.transform = 'translateX(-7px)');
+
+            // Start Crying
+            tearInterval = setInterval(() => {
+                document.querySelectorAll('.tear-box').forEach(box => {
+                    const tear = document.createElement('div');
+                    tear.className = 'tear';
+                    tear.style.left = Math.random() > 0.5 ? '30%' : '65%';
+                    tear.style.top = '40%';
+                    box.appendChild(tear);
+                    setTimeout(() => tear.remove(), 800);
+                });
+            }, 150);
+
+            // Reset after few seconds
+            setTimeout(() => {
+                if (!ghosts[0].classList.contains('happy')) {
+                    bubble.style.display = 'none';
+                    clearInterval(tearInterval);
+                }
+            }, 3000);
+        }
+    });
+</script>
+</body>
+</html>
