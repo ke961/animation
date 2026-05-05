@@ -247,8 +247,8 @@
     const bubble = document.getElementById('bubble');
     let tearInterval;
 
-    const CORRECT_USER = "keya";
-    const CORRECT_PASS = "1234";
+    const CORRECT_USER = "keya"; //username for log in
+    const CORRECT_PASS = "1234"; // password for login
 
     // 1. Cursor Tracking
     document.addEventListener('mousemove', (e) => {
@@ -262,6 +262,7 @@
             const angle = Math.atan2(e.clientX - x, e.clientY - y);
             const rot = (angle * (180 / Math.PI) * -1) + 180;
             pupil.style.transform = `rotate(${rot}deg) translate(4px)`;
+
         });
     });
 
