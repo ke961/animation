@@ -174,7 +174,7 @@
         .input-group { margin-bottom: 25px; }
         label { display: block; margin-bottom: 10px; font-weight: 600; color: #64748b; }
         input {
-            width: 100%; padding: 14px; border: 2.5px solid #e2e8f0;
+            width: 100%; padding: 14px; border: 2.55px solid #e2e8f0;
             border-radius: 12px; font-size: 16px; outline: none; transition: 0.3s;
             box-sizing: border-box;
         }
@@ -315,7 +315,7 @@
                 document.querySelectorAll('.tear-box').forEach(box => {
                     const tear = document.createElement('div');
                     tear.className = 'tear';
-                    tear.style.left = Math.random() > 0.5 ? '30%' : '65%';
+                    tear.style.left = Math.random() > 0.6 ? '30%' : '65%';
                     tear.style.top = '40%';
                     box.appendChild(tear);
                     setTimeout(() => tear.remove(), 800);
