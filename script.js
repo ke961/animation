@@ -28,7 +28,7 @@ passwordInput.addEventListener('focus', () => {
     this.tearInterval = setInterval(() => {
         const tear = document.createElement('div');
         tear.className = 'tear';
-        tear.style.left = (Math.random() > 0.5 ? '30px' : '60px');
+        tear.style.left = (Math.random() > 0.6 ? '30px' : '50px');
         tearsContainer.appendChild(tear);
         setTimeout(() => tear.remove(), 600);
     }, 150);
