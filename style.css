@@ -50,7 +50,7 @@
 }
 
 .mouth {
-    width: 18px; height: 12px; background: #e74c3c;
+    width: 18px; height: 13px; background: #e74c3c;
     border: 2px solid #000; border-radius: 0 0 10px 10px;
     position: absolute; top: 65px; left: 50%; transform: translateX(-50%);
 }
@@ -83,7 +83,7 @@
 
 /* Speech Bubble */
 .speech-bubble {
-    position: absolute; top: -60px; right: -20px;
+    position: absolute; top: -50px; right: -19px;
     background: #000; color: #fff; padding: 5px 12px;
     border-radius: 10px; font-size: 12px; display: none;
 }
